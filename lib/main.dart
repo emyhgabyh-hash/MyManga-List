@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'login_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -87,11 +88,14 @@ class HomePage extends StatelessWidget {
             SizedBox(height: 40),
 
             ElevatedButton(
-
               onPressed: () {
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                  ),
+                );
               },
-
               child: Text("Entrar"),
             ),
 
