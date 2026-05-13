@@ -66,11 +66,57 @@ class HomeMangaPage extends StatelessWidget {
                   ),
                 ),
 
-                subtitle: const Text("Mangá adicionado à lista"),
+                subtitle: const Text(
+                  "Mangá adicionado à lista",
+                ),
 
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+
+                  children: [
+
+                    IconButton(
+
+                      onPressed: () {
+
+                      },
+
+                      icon: const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                    ),
+
+                    IconButton(
+
+                      onPressed: () {
+
+                      },
+
+                      icon: const Icon(
+                        Icons.auto_stories,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           },
+        ),
+      ),
+
+      floatingActionButton: FloatingActionButton(
+
+        backgroundColor: const Color.fromARGB(255, 81, 49, 134),
+
+        onPressed: () {
+
+        },
+
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
         ),
       ),
     );
