@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'home_manga_page.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key}); 
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class LoginPage extends StatelessWidget {
               "MyManga List",
               style: GoogleFonts.modak(
                 fontSize: 36,
-                color: const Color.fromARGB(255, 81, 49, 134), 
+                color: const Color.fromARGB(255, 81, 49, 134),
               ),
             ),
 
@@ -55,10 +56,21 @@ class LoginPage extends StatelessWidget {
 
             SizedBox(
               width: double.infinity,
+
               child: ElevatedButton(
+
                 onPressed: () {
 
+                  Navigator.push(
+
+                    context,
+
+                    MaterialPageRoute(
+                      builder: (context) => const HomeMangaPage(),
+                    ),
+                  );
                 },
+
                 child: const Text("Entrar"),
               ),
             ),
