@@ -7,71 +7,81 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold( // Estrutura principal da tela
 
-    return Scaffold(
+      appBar: AppBar( // Barra superior LAYOUT
 
-      appBar: AppBar(
         title: Text(
           "Entrar",
-          style: GoogleFonts.modak(),
+          style: GoogleFonts.modak(), // Fonte personalizada LAYOUT
         ),
       ),
 
-      body: Padding(
+      body: Padding( // Espaçamento interno LAYOUT
+
         padding: const EdgeInsets.all(24.0),
 
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Column( // Organiza widgets verticalmente LAYOUT
+
+          mainAxisAlignment: MainAxisAlignment.center, // Centraliza os widgets LAYOUT
 
           children: [
-
             Text(
               "MyManga List",
-              style: GoogleFonts.modak(
+              style: GoogleFonts.modak( // Fonte personalizada LAYOUT
                 fontSize: 36,
                 color: const Color.fromARGB(255, 81, 49, 134),
               ),
             ),
 
-            const SizedBox(height: 40),
+            const SizedBox(height: 40), // Espaçamento LAYOUT
 
-            TextField(
+            TextField( // Campo de texto para email INPUT
+
               decoration: const InputDecoration(
-                labelText: "Email",
-                border: OutlineInputBorder(),
+
+                labelText: "Email", // Nome do campo INPUT
+
+                border: OutlineInputBorder(), // Borda do campo LAYOUT
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 20), // Espaçamento LAYOUT
 
-            TextField(
-              obscureText: true,
+            TextField( // Campo de senha INPUT
+
+              obscureText: true, // Esconde os caracteres digitados INPUT
+
               decoration: const InputDecoration(
+
                 labelText: "Senha",
+
                 border: OutlineInputBorder(),
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 30), // Espaçamento LAYOUT
 
-            SizedBox(
-              width: double.infinity,
+            SizedBox( // Define a largura LAYOUT
 
-              child: ElevatedButton(
+              width: double.infinity, // Faz o botão ocupar toda largura
+
+              child: ElevatedButton( // Botão clicável INPUT
 
                 onPressed: () {
 
-                  Navigator.push(
+                  Navigator.push( // Navega para outra tela NAVEGAÇÃO
 
                     context,
 
-                    MaterialPageRoute(
-                      builder: (context) => const HomeMangaPage(),
+                    MaterialPageRoute( // Define qual tela abrir NAVEGAÇÃO
+
+                      builder: (context) => const HomeMangaPage(), // Abre a HomeMangaPage NAVEGAÇÃO
                     ),
                   );
                 },
-
                 child: const Text("Entrar"),
+                
               ),
             ),
           ],

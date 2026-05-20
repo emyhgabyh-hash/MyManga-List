@@ -1,117 +1,122 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'login_page.dart';
+import 'package:flutter/material.dart';   // Biblioteca principal do Flutter (widgets, botões, telas, ícones)
+import 'package:google_fonts/google_fonts.dart';   // Pacote usado para aplicar fontes personalizadas
+import 'login_page.dart'; // Importa a tela de login para navegação
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-
-    return MaterialApp(
-
-      debugShowCheckedModeBanner: false,
-
-      title: 'MyManga List',
-
-      theme: ThemeData(
-
-        scaffoldBackgroundColor: const Color.fromARGB(255, 241, 233, 218),
-
-        primaryColor: Color(0xFF7E57C2),
-
-        appBarTheme: AppBarTheme(
-          backgroundColor: Color.fromARGB(255, 81, 49, 134),
-          foregroundColor: const Color.fromARGB(255, 241, 233, 218),
-        ),
-
-        elevatedButtonTheme: ElevatedButtonThemeData(
-
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Color.fromARGB(255, 81, 49, 134),
-            foregroundColor:const Color.fromARGB(255, 241, 233, 218),
-          ),
-        ),
-      ),
-
-      home: HomePage(),
-    );
+  void main() {
+    runApp(MyApp());
   }
-}
 
-class HomePage extends StatelessWidget {
+  class MyApp extends StatelessWidget { // Widget sem alteração dinâmica
+    @override
+    Widget build(BuildContext context) {
+      return MaterialApp( // Scaffold cria a estrutura principal da tela LAYOUT
+        debugShowCheckedModeBanner: false,
 
-  @override
-  Widget build(BuildContext context) {
+        title: 'MyManga List',
+        theme: ThemeData( // Tema global do aplicativo LAYOUT
 
-    return Scaffold(
+          scaffoldBackgroundColor: const Color.fromARGB(255, 241, 233, 218), // Cor de fundo das telas
 
-      appBar: AppBar(
-        title: Text(
-          "MyManga List",
-          style: GoogleFonts.modak(
-            fontSize: 24,
-            color: const Color.fromARGB(255, 241, 233, 218),
+          primaryColor: Color(0xFF7E57C2), // Cor principal do app
+
+          appBarTheme: AppBarTheme( // Tema da AppBar padrão LAYOUT
+
+            backgroundColor: Color.fromARGB(255, 81, 49, 134), // Fundo da AppBar
+
+            foregroundColor: const Color.fromARGB(255, 241, 233, 218), // Cor dos textos e ícones
+          ),
+
+          elevatedButtonTheme: ElevatedButtonThemeData(
+
+            style: ElevatedButton.styleFrom( // Estilo padrão dos botões LAYOUT
+
+              backgroundColor: Color.fromARGB(255, 81, 49, 134),
+
+              foregroundColor: const Color.fromARGB(255, 241, 233, 218),
+            ),
           ),
         ),
-      ),
 
-      body: Center(
+        home: HomePage(), // Define a tela inicial NAVEGAÇÃO
+      );
+    }
+  }
 
-        child: Column(
+  class HomePage extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
 
-          mainAxisAlignment: MainAxisAlignment.center,
+      return Scaffold( // Estrutura principal da tela LAYOUT
 
-          children: [
+        appBar: AppBar( // Barra superior LAYOUT
 
-            Icon(
-              Icons.menu_book,
-              size: 100,
-              color: Color.fromARGB(255, 81, 49, 134),
+          title: Text(
+            "MyManga List",
+
+            style: GoogleFonts.modak( // Fonte personalizada LAYOUT
+              fontSize: 24,
+              color: const Color.fromARGB(255, 241, 233, 218),
             ),
+          ),
+        ),
 
-            SizedBox(height: 20),
+        body: Center( // Centraliza os elementos LAYOUT
 
-            Text(
+          child: Column( // Organiza widgets verticalmente LAYOUT
 
-              "MyManga List",
+            mainAxisAlignment: MainAxisAlignment.center, // Centraliza os widgets na tela
 
-              style: GoogleFonts.modak(
-                fontSize: 42,
+            children: [
+
+              Icon(
+                Icons.menu_book, // Ícone da biblioteca Material Icons LAYOUT
+                size: 100,
                 color: Color.fromARGB(255, 81, 49, 134),
               ),
-            ),
 
-            SizedBox(height: 40),
+              SizedBox(height: 20), // Espaçamento entre widgets LAYOUT
 
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(),
-                  ),
-                );
-              },
-              child: Text("Entrar"),
-            ),
+              Text(
+                "MyManga List",
+                
+                style: GoogleFonts.modak( // Fonte personalizada LAYOUT
+                  fontSize: 42,
+                  color: Color.fromARGB(255, 81, 49, 134),
+                ),
+              ),
 
-            SizedBox(height: 20),
+              SizedBox(height: 40), // Espaçamento LAYOUT
 
-            ElevatedButton(
+              ElevatedButton( // Botão clicável INPUT
 
-              onPressed: () {
+                onPressed: () {
 
-              },
+                  Navigator.push( // Navegação para outra tela
 
-              child: Text("Criar Conta"),
-            ),
-          ],
+                    context,
+
+                    MaterialPageRoute( // Define a rota da próxima página NAVEGAÇÃO
+
+                      builder: (context) => LoginPage(), // Abre a LoginPage NAVEGAÇÃO
+                    ),
+                  );
+                },
+
+                child: Text("Entrar"),
+              ),
+
+              SizedBox(height: 20),
+
+              ElevatedButton( // Segundo botão clicável INPUT
+
+                onPressed: () {
+
+                },
+                child: Text("Criar Conta"),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
-}
