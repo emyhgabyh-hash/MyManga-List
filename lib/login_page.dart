@@ -15,7 +15,7 @@ class LoginPage extends StatelessWidget {
           "Entrar",
           style: GoogleFonts.modak(), // Fonte personalizada LAYOUT
         ),
-      ),
+       ),
 
       body: Padding( // Espaçamento interno LAYOUT
 

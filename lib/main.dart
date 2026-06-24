@@ -9,7 +9,7 @@ import 'login_page.dart'; // Importa a tela de login para navegação
   class MyApp extends StatelessWidget { // Widget sem alteração dinâmica
     @override
     Widget build(BuildContext context) {
-      return MaterialApp( // Scaffold cria a estrutura principal da tela LAYOUT
+      return MaterialApp( // Cria a estrutura principal da tela LAYOUT
         debugShowCheckedModeBanner: false,
 
         title: 'MyManga List',
@@ -78,7 +78,7 @@ import 'login_page.dart'; // Importa a tela de login para navegação
 
               Text(
                 "MyManga List",
-                
+
                 style: GoogleFonts.modak( // Fonte personalizada LAYOUT
                   fontSize: 42,
                   color: Color.fromARGB(255, 81, 49, 134),
@@ -91,7 +91,7 @@ import 'login_page.dart'; // Importa a tela de login para navegação
 
                 onPressed: () {
 
-                  Navigator.push( // Navegação para outra tela
+                  Navigator.push( // Navegação para outra tela NAVEGAÇÃO
 
                     context,
 

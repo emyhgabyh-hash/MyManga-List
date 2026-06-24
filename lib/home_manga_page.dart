@@ -103,7 +103,7 @@ class HomeMangaPage extends StatelessWidget {
         ),
       ),
 
-      floatingActionButton: FloatingActionButton( // Botão flutuante INPUT
+      floatingActionButton: FloatingActionButton( // Botão de adicionar INPUT
 
         backgroundColor: const Color.fromARGB(255, 81, 49, 134),
         
