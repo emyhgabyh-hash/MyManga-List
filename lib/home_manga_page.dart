@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'review_page.dart';
 
 class HomeMangaPage extends StatelessWidget {
   const HomeMangaPage({super.key});
@@ -72,18 +73,20 @@ class HomeMangaPage extends StatelessWidget {
 
                   children: [
 
-                    IconButton( // Botão favorito INPUT
-
-                      onPressed: () {
-
-                      },
-
-                      icon: const Icon( // Icone de estrela INPUT
-                        Icons.star,
-                        color: Color.fromARGB(255, 255, 191, 0),
-                      ),
+                    IconButton( // Botão favorito/avaliar INPUT (Atualizado)
+                    onPressed: () {
+                      Navigator.push( // Navega para a tela de avaliação NAVEGAÇÃO
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ReviewPage(mangaTitle: mangas[index]), // Passa o nome do mangá escolhido
+                        ),
+                      );
+                    },
+                    icon: const Icon( // Icone de estrela INPUT
+                      Icons.star,
+                      color: Color.fromARGB(255, 255, 191, 0),
                     ),
-
+                  ),
                     IconButton(// Botão de leitura INPUT
 
                       onPressed: () {
