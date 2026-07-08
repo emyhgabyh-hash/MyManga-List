@@ -63,17 +63,18 @@ class HomeMangaPage extends StatelessWidget {
                           ),
                         );
                       },
+                      
                       icon: const Icon( // Icone de estrela INPUT
                         Icons.star,
                         color: Color.fromARGB(255, 255, 191, 0),
                       ),
                     ),
+
                     IconButton( // Botão de leitura INPUT
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            // CORREÇÃO: Alterado de ReadingPage para ReadingProgressPage
                             builder: (context) => ReadingProgressPage(
                               mangaTitle: mangas[index],
                             ),

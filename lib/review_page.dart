@@ -50,6 +50,10 @@ class _ReviewPageState extends State<ReviewPage> {
                     size: 36,
                   ),
                   onPressed: () {
+
+                    // O setState() é usado quando o usuário escolhe uma nota. 
+                    // Ao clicar em uma estrela, a tela é atualizada para mostrar a 
+                    // quantidade de estrelas selecionadas.
                     setState(() {
                       _selectedRating = index + 1;
                     });
