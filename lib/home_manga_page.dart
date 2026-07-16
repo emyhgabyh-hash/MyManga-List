@@ -102,6 +102,7 @@ class HomeMangaPage extends StatelessWidget {
         child: const Icon( // Ícone de adicionar LAYOUT
           Icons.add, 
           color: Colors.white,
+          
         ),
       ),
     );

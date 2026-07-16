@@ -14,8 +14,11 @@ class ReadingProgressPage extends StatefulWidget {
 }
 
 class _ReadingProgressPageState extends State<ReadingProgressPage> {
-  // Controladores para capturar e gerenciar o texto digitado INPUT
+  // Controladores pra gerenciar o texto digitado INPUT
+  // Controla os capítulos lidos
   final TextEditingController _readController = TextEditingController();
+
+  //controla o total dos capítulos
   final TextEditingController _totalController = TextEditingController();
 
   // Variáveis de estado para armazenar o progresso calculado INPUT
@@ -32,9 +35,7 @@ class _ReadingProgressPageState extends State<ReadingProgressPage> {
     if (total > 0 && read <= total) {
 
       // Atualiza a tela INPUT
-      // O setState() atualiza a tela quando o usuário calcula o progresso da leitura.
-      // Depois que os capítulos são informados, a barra de progresso e 
-      // a porcentagem são atualizadas automaticamente.
+      // O setState atualiza a tela quando o usuário calcula o progresso da leitura.
 
       setState(() {
         _progress = read / total; // Divide os capítulos lidos pelo total
@@ -121,18 +122,18 @@ class _ReadingProgressPageState extends State<ReadingProgressPage> {
 
             const SizedBox(height: 35),
 
-            // Construtor de animação implícita nativa do Flutter ANIMAÇÃO
+            // Animação automática ANIMAÇÃO
             TweenAnimationBuilder<double>(
-              // Define o intervalo de início e fim da animação ANIMAÇÃO
+              // Define o início e fim da animação ANIMAÇÃO
               tween: Tween(begin: 0, end: _progress),
               // Duração da transição da barra de progresso ANIMAÇÃO
               duration: const Duration(milliseconds: 900),
-              // Constrói visualmente a animação conforme o valor muda ANIMAÇÃO
+              // Muda visualmente a animação conforme o valor muda ANIMAÇÃO
               builder: (context, value, child) {
                 return Column(
                   children: [
-                    LinearProgressIndicator( // Barra de progresso gráfica LAYOUT
-                      value: value, // Recebe o valor animado corrente ANIMAÇÃO
+                    LinearProgressIndicator( // Cria a barra de progresso na tela LAYOUT
+                      value: value, // Faz com que a barra aumente aos poucos ANIMAÇÃO
                       minHeight: 18,
                       borderRadius: BorderRadius.circular(15),
                       backgroundColor: Colors.grey.shade300,

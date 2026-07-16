@@ -8,9 +8,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold( // Estrutura principal da tela
-
       appBar: AppBar( // Barra superior LAYOUT
-
         title: Text(
           "Entrar",
           style: GoogleFonts.modak(), // Fonte personalizada LAYOUT
@@ -18,13 +16,9 @@ class LoginPage extends StatelessWidget {
        ),
 
       body: Padding( // Espaçamento interno LAYOUT
-
         padding: const EdgeInsets.all(24.0),
-
         child: Column( // Organiza widgets verticalmente LAYOUT
-
           mainAxisAlignment: MainAxisAlignment.center, // Centraliza os widgets LAYOUT
-
           children: [
             Text(
               "MyManga List",

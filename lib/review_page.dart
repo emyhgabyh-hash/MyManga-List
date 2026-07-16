@@ -11,7 +11,7 @@ class ReviewPage extends StatefulWidget {
 }
 
 class _ReviewPageState extends State<ReviewPage> {
-  // INPUT: Gerenciamento dos dados digitados e selecionados
+  // Gerenciamento dos dados selecionados INPUT
   int _selectedRating = 0;
   final TextEditingController _reviewController = TextEditingController();
 
@@ -23,7 +23,7 @@ class _ReviewPageState extends State<ReviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    // LAYOUT: Estrutura base e organização visual da tela
+    // Estrutura base e organização visual da tela LAYOUT
     return Scaffold(
       appBar: AppBar(
         title: Text('Avaliar ${widget.mangaTitle}', style: GoogleFonts.poppins()),
@@ -40,7 +40,7 @@ class _ReviewPageState extends State<ReviewPage> {
             ),
             const SizedBox(height: 8),
             
-            // INPUT: Interação nativa com estrelas usando IconButton e setState
+            // Interação com as estrelas INPUT
             Row(
               children: List.generate(5, (index) {
                 return IconButton(
@@ -51,9 +51,8 @@ class _ReviewPageState extends State<ReviewPage> {
                   ),
                   onPressed: () {
 
-                    // O setState() é usado quando o usuário escolhe uma nota. 
-                    // Ao clicar em uma estrela, a tela é atualizada para mostrar a 
-                    // quantidade de estrelas selecionadas.
+                    // O setState é usado pra escolher uma nota. 
+                    // Quando clicar na estrela vai atualizar e mostrar a quandidade de estrela preenchida
                     setState(() {
                       _selectedRating = index + 1;
                     });
@@ -68,7 +67,7 @@ class _ReviewPageState extends State<ReviewPage> {
             ),
             const SizedBox(height: 8),
             
-            // INPUT: Captura de texto do usuário
+            // Captura de texto do usuário INPUT
             TextField(
               controller: _reviewController,
               maxLines: 4,
@@ -79,7 +78,7 @@ class _ReviewPageState extends State<ReviewPage> {
             ),
             const SizedBox(height: 24),
             
-            // INPUT: Botão de ação para envio dos dados
+            // Botão de envio dos dados INPUT
             SizedBox(
               width: double.infinity,
               height: 50,
@@ -97,7 +96,7 @@ class _ReviewPageState extends State<ReviewPage> {
                     const SnackBar(content: Text('Avaliação salva com sucesso!')),
                   );
 
-                  // NAVEGAÇÃO: Retorno nativo desempilhando a tela
+                  //  Retorno nativo desempilhando a tela NAVEGAÇÃO
                   Navigator.pop(context);
                 },
                 child: Text(
