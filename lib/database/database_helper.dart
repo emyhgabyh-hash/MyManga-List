@@ -44,10 +44,7 @@ class DatabaseHelper {
     ''');
   }
 
-  // ===========================
-  // CREATE
-  // ===========================
-
+  // Criar
   Future<int> insertManga(Manga manga) async {
     final db = await instance.database;
 
@@ -57,10 +54,7 @@ class DatabaseHelper {
     );
   }
 
-  // ===========================
-  // READ
-  // ===========================
-
+  // Ler
   Future<List<Manga>> getMangas() async {
     final db = await instance.database;
 
@@ -69,10 +63,7 @@ class DatabaseHelper {
     return result.map((json) => Manga.fromMap(json)).toList();
   }
 
-  // ===========================
-  // UPDATE
-  // ===========================
-
+  // Atualizar
   Future<int> updateManga(Manga manga) async {
     final db = await instance.database;
 
@@ -84,10 +75,7 @@ class DatabaseHelper {
     );
   }
 
-  // ===========================
-  // DELETE
-  // ===========================
-
+  // Deletar
   Future<int> deleteManga(int id) async {
     final db = await instance.database;
 

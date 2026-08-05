@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'home_manga_page.dart';
+import 'register_page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -13,7 +14,7 @@ class LoginPage extends StatelessWidget {
           "Entrar",
           style: GoogleFonts.modak(), // Fonte personalizada LAYOUT
         ),
-       ),
+      ),
 
       body: Padding( // Espaçamento interno LAYOUT
         padding: const EdgeInsets.all(24.0),
@@ -75,8 +76,30 @@ class LoginPage extends StatelessWidget {
                   );
                 },
                 child: const Text("Entrar"),
-                
+
               ),
+            ),
+
+            const SizedBox(height: 15), // Espaçamento LAYOUT
+
+            TextButton( // Botão para ir para a tela de cadastro INPUT
+
+              onPressed: () {
+
+                Navigator.push( // Navega para tela de cadastro NAVEGAÇÃO
+
+                  context,
+
+                  MaterialPageRoute(
+
+                    builder: (context) => const RegisterPage(), // Abre a RegisterPage NAVEGAÇÃO
+
+                  ),
+                );
+              },
+
+              child: const Text("Criar uma conta"),
+
             ),
           ],
         ),
