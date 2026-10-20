@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'login_page.dart';
 
-
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -16,9 +15,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
     // Aguarda alguns segundos antes de abrir a tela de login
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 4), () {
 
       // Verifica se a tela ainda está aberta antes de navegar
       if (mounted) {
@@ -36,14 +34,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold( // Estrutura principal da tela LAYOUT
-
       body: Center( // Centraliza os elementos LAYOUT
-
         child: Column( // Organiza os widgets verticalmente LAYOUT
           mainAxisAlignment: MainAxisAlignment.center, // Centraliza os widgets na tela
-
           children: [
-
             Icon(
               Icons.menu_book, // Ícone do aplicativo LAYOUT
               size: 100,
@@ -51,7 +45,6 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
 
             SizedBox(height: 20), // Espaçamento entre widgets LAYOUT
-
             Text(
               "MyManga List",
               style: GoogleFonts.modak( // Fonte personalizada LAYOUT
@@ -61,7 +54,6 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
 
             SizedBox(height: 10), // Espaçamento LAYOUT
-
             Text(
               "Sua biblioteca de mangás",
               style: TextStyle(

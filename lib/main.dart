@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';   // Biblioteca principal do Flutter (widgets, botões, telas, ícones)
-import 'package:google_fonts/google_fonts.dart';  // Pacote usado para aplicar fontes personalizadas
+import 'package:google_fonts/google_fonts.dart'; // Pacote usado para aplicar fontes personalizadas
 import 'splash_screen.dart'; // Importa a SplashScreen para iniciar o aplicativo
-
 
 void main() {
   runApp(const MyApp());

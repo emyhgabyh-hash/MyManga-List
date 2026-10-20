@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'models/manga.dart';
-import 'controllers/manga_controller.dart';
-
+import 'models/manga.dart'; // Importa o Model que representa os dados do mangá
+import 'controllers/manga_controller.dart'; // Importa o Controller responsável pela comunicação com o banco
 
 class ReviewPage extends StatefulWidget {
   final String mangaTitle;
@@ -12,11 +11,9 @@ class ReviewPage extends StatefulWidget {
     required this.mangaTitle,
   });
 
-
   @override
   State<ReviewPage> createState() => _ReviewPageState();
 }
-
 
 class _ReviewPageState extends State<ReviewPage> {
 
@@ -27,23 +24,23 @@ class _ReviewPageState extends State<ReviewPage> {
   int _selectedRating = 0;
 
   // Controller usado para capturar o comentário INPUT
+  // O comentário é armazenado temporariamente neste controller
   final TextEditingController _reviewController =
       TextEditingController();
-
 
   // Carrega a nota que já está salva no banco
   Future<void> _carregarNota() async {
 
     // Busca os mangás cadastrados no banco
+    // O Controller solicita ao Database os registros armazenados
     final mangas = await _mangaController.listarMangas();
 
     // Procura o mangá selecionado
     for (final manga in mangas) {
-
       if (manga.titulo == widget.mangaTitle) {
 
         setState(() {
-          // Pega a nota salva no banco
+          // Salva a nota no banco
           _selectedRating = manga.nota;
         });
 
@@ -52,32 +49,27 @@ class _ReviewPageState extends State<ReviewPage> {
     }
   }
 
-
   @override
   void initState() {
     super.initState();
-
     // Carrega a nota salva assim que a tela abre
     _carregarNota();
   }
 
-
   @override
   void dispose() {
 
-    // Libera a memória limpando o controller
+    // Libera a memória do controller
     _reviewController.dispose();
-
     super.dispose();
   }
 
-
   // Salva a avaliação no banco de dados
+  // Como o mangá já existe, a nota é salva
   Future<void> _salvarAvaliacao() async {
 
     // Verifica se alguma estrela foi selecionada
     if (_selectedRating == 0) {
-
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -89,17 +81,15 @@ class _ReviewPageState extends State<ReviewPage> {
       return;
     }
 
-
     // Busca os mangás cadastrados
     final mangas = await _mangaController.listarMangas();
 
-
     // Procura o mangá que está sendo avaliado
     for (final manga in mangas) {
-
       if (manga.titulo == widget.mangaTitle) {
 
         // Cria o mangá atualizado
+        // Mantém o ID original para identificar o registro alterado
         final mangaAtualizado = Manga(
           id: manga.id,
           titulo: manga.titulo,
@@ -107,18 +97,16 @@ class _ReviewPageState extends State<ReviewPage> {
           progresso: manga.progresso,
         );
 
-
         // Atualiza a nota no banco de dados
+        // O Controller envia o objeto atualizado para o Database
+        // O Database realiza o UPDATE no SQLite
         await _mangaController.atualizarManga(mangaAtualizado);
-
         break;
       }
     }
 
-
     // Mostra uma mensagem avisando que foi salvo
     if (mounted) {
-
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -127,21 +115,16 @@ class _ReviewPageState extends State<ReviewPage> {
         ),
       );
 
-
       // Volta para a tela anterior NAVEGAÇÃO
       Navigator.pop(context);
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     // Estrutura base e organização visual da tela LAYOUT
     return Scaffold(
-
       appBar: AppBar(
-
         title: Text(
           'Avaliar ${widget.mangaTitle}',
           style: GoogleFonts.poppins(),
@@ -150,51 +133,33 @@ class _ReviewPageState extends State<ReviewPage> {
         backgroundColor: Colors.deepPurple,
       ),
 
-
       body: SingleChildScrollView(
-
         padding: const EdgeInsets.all(16.0),
-
         child: Column(
-
           crossAxisAlignment: CrossAxisAlignment.start,
-
           children: [
-
             Text(
               'Sua nota:',
-
               style: GoogleFonts.poppins(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
-
             const SizedBox(height: 8),
-
-
             // Interação com as estrelas INPUT
             Row(
-
               children: List.generate(5, (index) {
-
                 return IconButton(
-
                   icon: Icon(
-
                     index < _selectedRating
                         ? Icons.star
                         : Icons.star_border,
-
                     color: Colors.amber,
-
                     size: 36,
                   ),
 
-
                   onPressed: () {
-
                     // O setState é usado pra escolher uma nota.
                     // Quando clicar na estrela vai atualizar e mostrar a quantidade de estrelas preenchidas.
                     setState(() {
@@ -205,60 +170,39 @@ class _ReviewPageState extends State<ReviewPage> {
               }),
             ),
 
-
             const SizedBox(height: 20),
-
-
             Text(
               'Seu comentário:',
-
               style: GoogleFonts.poppins(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
-
             const SizedBox(height: 8),
-
-
             // Captura de texto do usuário INPUT
             TextField(
-
               controller: _reviewController,
-
               maxLines: 4,
-
               decoration: const InputDecoration(
-
                 border: OutlineInputBorder(),
-
                 hintText: 'O que você achou deste mangá?',
               ),
             ),
 
-
             const SizedBox(height: 24),
-
-
             // Botão de envio dos dados INPUT
             SizedBox(
-
               width: double.infinity,
-
               height: 50,
-
               child: ElevatedButton(
-
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
                 ),
 
                 onPressed: _salvarAvaliacao,
-
                 child: Text(
                   'Enviar Avaliação',
-
                   style: GoogleFonts.poppins(
                     fontSize: 16,
                     color: Colors.white,

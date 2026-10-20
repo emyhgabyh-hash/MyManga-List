@@ -1,48 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'home_manga_page.dart';
-import 'register_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';// Permite salvar e recuperar dados do celular
+import 'home_manga_page.dart'; // Importa a tela principal dos mangás
+import 'register_page.dart'; // Importa a tela de cadastro
 
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
-
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
-
 class _LoginPageState extends State<LoginPage> {
-
   // Controladores para capturar os dados digitados INPUT
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-
   @override
   void dispose() {
-
     // Libera a memória limpando os controladores
     _emailController.dispose();
     _passwordController.dispose();
-
     super.dispose();
   }
 
-
   // Verifica os dados do usuário no SharedPreferences
   Future<void> _entrar() async {
-
     // Pega os dados digitados
     final String email = _emailController.text.trim();
     final String senha = _passwordController.text;
-
-
     // Verifica se os campos estão preenchidos
     if (email.isEmpty || senha.isEmpty) {
-
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -50,26 +39,19 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       );
-
       return;
     }
 
-
     // Abre o SharedPreferences
     final prefs = await SharedPreferences.getInstance();
-
-
     // Pega os dados que foram salvos no cadastro
     final String? emailSalvo = prefs.getString('email');
     final String? senhaSalva = prefs.getString('senha');
-
-
     // Verifica se o email e a senha estão corretos
     if (email == emailSalvo && senha == senhaSalva) {
-
       // Se estiverem corretos, abre a HomeMangaPage NAVEGAÇÃO
       if (mounted) {
-
+        // Substitui a tela de login pela tela principal
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -77,9 +59,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       }
-
     } else {
-
       // Mostra uma mensagem caso os dados estejam incorretos
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -91,114 +71,74 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold( // Estrutura principal da tela LAYOUT
-
       appBar: AppBar( // Barra superior LAYOUT
-
         title: Text(
           "Entrar",
           style: GoogleFonts.modak(), // Fonte personalizada LAYOUT
         ),
       ),
 
-
       body: Padding( // Espaçamento interno LAYOUT
-
         padding: const EdgeInsets.all(24.0),
-
         child: Column( // Organiza widgets verticalmente LAYOUT
-
           mainAxisAlignment: MainAxisAlignment.center,
-
           children: [
-
             Text(
               "MyManga List",
-
               style: GoogleFonts.modak( // Fonte personalizada LAYOUT
                 fontSize: 36,
                 color: const Color.fromARGB(255, 81, 49, 134),
               ),
             ),
 
-
             const SizedBox(height: 40),
-
 
             // Campo de texto para email INPUT
             TextField(
-
               controller: _emailController,
-
+              // Define o teclado próprio para digitação de email INPUT
               keyboardType: TextInputType.emailAddress,
-
               decoration: const InputDecoration(
-
                 labelText: "Email", // Nome do campo INPUT
-
                 border: OutlineInputBorder(), // Borda do campo LAYOUT
               ),
             ),
 
-
             const SizedBox(height: 20),
-
 
             // Campo de senha INPUT
             TextField(
-
               controller: _passwordController,
-
               obscureText: true, // Esconde os caracteres digitados INPUT
-
               decoration: const InputDecoration(
-
                 labelText: "Senha",
-
                 border: OutlineInputBorder(),
               ),
             ),
-
-
+            
             const SizedBox(height: 30),
-
-
             SizedBox(
-
               width: double.infinity,
-
               child: ElevatedButton( // Botão clicável INPUT
-
+                // Chama a função que verifica o login
                 onPressed: _entrar,
-
                 child: const Text("Entrar"),
               ),
             ),
 
-
             const SizedBox(height: 15),
-
-
             TextButton( // Botão para ir para a tela de cadastro INPUT
-
               onPressed: () {
-
                 Navigator.push( // Navega para tela de cadastro NAVEGAÇÃO
-
                   context,
-
                   MaterialPageRoute(
-
                     builder: (context) => const RegisterPage(), // Abre a RegisterPage NAVEGAÇÃO
-
                   ),
                 );
               },
-
               child: const Text("Criar uma conta"),
             ),
           ],

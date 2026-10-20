@@ -1,5 +1,7 @@
+//MODEL serve pra definir a esctrutura dos dados
+
 class Manga {
-  int? id;
+  int? id; // Identifica o mangá
   String titulo;
   int nota;
   int progresso;
@@ -12,7 +14,7 @@ class Manga {
     this.progresso = 0,
   });
 
-  // Converte um objeto Manga para Map (usado pelo SQLite)
+  // Converte um objeto Manga para Map
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -22,7 +24,7 @@ class Manga {
     };
   }
 
-  // Converte um Map vindo do SQLite para um objeto Manga
+  // Converte um Map para um objeto Manga
   factory Manga.fromMap(Map<String, dynamic> map) {
     return Manga(
       id: map['id'],
