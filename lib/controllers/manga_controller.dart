@@ -1,32 +1,33 @@
-// CONTROLLER serve para controlar as operações do aplicativo
-
-import '../database/database_helper.dart'; // Importa o responsável pelo banco de dados
-import '../models/manga.dart'; // Importa o Model Manga
+// CONTROLLER: controla as operações com o banco SQLite
+import '../database/database_helper.dart';
+import '../models/manga.dart';
 
 class MangaController {
-
-  // Instância do banco de dados
-  // O Controller utiliza o DatabaseHelper para realizar as operações
   final DatabaseHelper _databaseHelper = DatabaseHelper.instance;
 
-  // Cria um novo manga
   Future<int> adicionarManga(Manga manga) async {
-    return await _databaseHelper.insertManga(manga);
+    return _databaseHelper.insertManga(manga);
   }
 
-  // Lê os mangás cadastrados
   Future<List<Manga>> listarMangas() async {
-    // Busca os dados e retorna uma lista
-    return await _databaseHelper.getMangas();
+    return _databaseHelper.getMangas();
   }
 
-  // Atualiza o mangá
   Future<int> atualizarManga(Manga manga) async {
-    return await _databaseHelper.updateManga(manga);
+    // Mantém a capa quando avaliação ou progresso atualizam o mangá.
+    if (manga.capa == null && manga.id != null) {
+      final lista = await _databaseHelper.getMangas();
+      for (final salvo in lista) {
+        if (salvo.id == manga.id) {
+          manga.capa = salvo.capa;
+          break;
+        }
+      }
+    }
+    return _databaseHelper.updateManga(manga);
   }
 
-  // Deleta um mangá pelo ID
   Future<int> excluirManga(int id) async {
-    return await _databaseHelper.deleteManga(id);
+    return _databaseHelper.deleteManga(id);
   }
 }

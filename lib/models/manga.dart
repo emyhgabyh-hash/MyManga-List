@@ -1,36 +1,26 @@
-//MODEL serve pra definir a esctrutura dos dados
-
+// MODEL dos mangás salvos no SQLite
 class Manga {
-  int? id; // Identifica o mangá
+  int? id;
   String titulo;
   int nota;
   int progresso;
+  String? capa;
 
-  // Construtor da classe
-  Manga({
-    this.id,
-    required this.titulo,
-    this.nota = 0,
-    this.progresso = 0,
-  });
+  Manga({this.id, required this.titulo, this.nota = 0, this.progresso = 0, this.capa});
 
-  // Converte um objeto Manga para Map
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'titulo': titulo,
-      'nota': nota,
-      'progresso': progresso,
-    };
-  }
+  Map<String, dynamic> toMap() => {
+    'id': id,
+    'titulo': titulo,
+    'nota': nota,
+    'progresso': progresso,
+    'capa': capa,
+  };
 
-  // Converte um Map para um objeto Manga
-  factory Manga.fromMap(Map<String, dynamic> map) {
-    return Manga(
-      id: map['id'],
-      titulo: map['titulo'],
-      nota: map['nota'],
-      progresso: map['progresso'],
-    );
-  }
+  factory Manga.fromMap(Map<String, dynamic> map) => Manga(
+    id: map['id'] as int?,
+    titulo: map['titulo'] as String,
+    nota: (map['nota'] as num).toInt(),
+    progresso: (map['progresso'] as num).toInt(),
+    capa: map['capa'] as String?,
+  );
 }

@@ -1,380 +1,168 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'review_page.dart'; // Importa a tela de avaliação
-import 'reading_page.dart'; // Importa a tela de progresso da leitura
-import 'models/manga.dart'; // Importa o Model do mangá
-import 'controllers/manga_controller.dart'; // Importa o Controller dos mangás
-import 'busca_manga_page.dart'; // NOVO: importa a tela de busca pela API
+import 'review_page.dart'; // Tela de avaliação
+import 'reading_page.dart'; // Tela de progresso
+import 'models/manga.dart'; // Model do banco
+import 'controllers/manga_controller.dart'; // Controller do banco
+import 'manga/MangaUI.dart'; // Busca pela API Kitsu
 
 class HomeMangaPage extends StatefulWidget {
   const HomeMangaPage({super.key});
   @override
   State<HomeMangaPage> createState() => _HomeMangaPageState();
 }
+
 class _HomeMangaPageState extends State<HomeMangaPage> {
-  // Controller usado para acessar o banco de dados
   final MangaController _mangaController = MangaController();
-  // Lista que recebe os mangás salvos no banco
   List<Manga> mangas = [];
-  // Carrega os mangás do banco de dados
+
+  // Carrega os mangás salvos no SQLite
   Future<void> _carregarMangas() async {
     final lista = await _mangaController.listarMangas();
-    // Atualiza a lista de mangás mostrada na tela
-    setState(() {
-      mangas = lista;
-    });
+    if (!mounted) return;
+    setState(() => mangas = lista);
   }
+
   @override
-  void initState() {
-    super.initState();
-    // Carrega os mangás assim que a tela abre
-    _carregarMangas();
-  }
-  // Abre uma janela para adicionar um novo mangá
+  void initState() { super.initState(); _carregarMangas(); }
+
+  // Adiciona um mangá digitado manualmente INPUT
   void _adicionarManga() {
-    // Controller para capturar o nome digitado INPUT
-    final TextEditingController tituloController =
-        TextEditingController();
-    // Abre uma janela sobre a tela atual
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(
-            "Adicionar Mangá",
-            style: GoogleFonts.modak(),
-          ),
-          // Campo usado para digitar o nome do mangá INPUT
-          content: TextField(
-            controller: tituloController,
-            decoration: const InputDecoration(
-              labelText: "Nome do mangá",
-              border: OutlineInputBorder(),
-            ),
-          ),
-          actions: [
-            // Botão para cancelar INPUT
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Fecha a janela NAVEGAÇÃO
-              },
-              child: const Text("Cancelar"),
-            ),
-            // Botão para adicionar INPUT
-            ElevatedButton(
-              onPressed: () async {
-                // Verifica se o campo não está vazio
-                if (tituloController.text.trim().isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Digite o nome do mangá!"),
-                    ),
-                  );
-                  return;
-                }
-                // Cria um novo objeto Manga
-                final manga = Manga(
-                  titulo: tituloController.text.trim(),
-                  nota: 0,
-                  progresso: 0,
-                );
-                // Salva o mangá no banco de dados
-                await _mangaController.adicionarManga(manga);
-                // Fecha a janela
-                if (context.mounted) {
-                  Navigator.pop(context);
-                }
-                // Atualiza a lista da tela
-                _carregarMangas();
-              },
-              child: const Text("Adicionar"),
-            ),
-          ],
-        );
-      },
-    );
+    final tituloController = TextEditingController();
+    showDialog(context: context, builder: (dialogContext) => AlertDialog(
+      title: Text('Adicionar Mangá', style: GoogleFonts.modak()),
+      content: TextField(controller: tituloController,
+        decoration: const InputDecoration(labelText: 'Nome do mangá', border: OutlineInputBorder())),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('Cancelar')),
+        ElevatedButton(onPressed: () async {
+          final titulo = tituloController.text.trim();
+          if (titulo.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Digite o nome do mangá!')));
+            return;
+          }
+          await _mangaController.adicionarManga(Manga(titulo: titulo));
+          if (!mounted) return;
+          if (dialogContext.mounted) Navigator.pop(dialogContext);
+          _carregarMangas();
+        }, child: const Text('Adicionar')),
+      ],
+    ));
   }
-  // Exclui um mangá do banco de dados
-  Future<void> _excluirManga(Manga manga) async {
-    // Verifica se o mangá possui um ID
-    if (manga.id != null) {
-      // Exclui o mangá usando o ID pelo Controller
-      await _mangaController.excluirManga(manga.id!);
-      // Atualiza a lista depois de excluir
-      _carregarMangas();
-      // Mostra uma mensagem confirmando a exclusão
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Mangá excluído com sucesso!"),
-        ),
-      );
-    }
-  }
-  // Abre uma janela para editar o mangá
+
+  // Edita o nome sem perder a capa, nota ou progresso
   void _editarManga(Manga manga) {
-    // Controller que recebe o título atual
-    final TextEditingController tituloController =
-        TextEditingController(text: manga.titulo);
-    // Abre uma janela sobre a tela atual
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(
-            "Editar Mangá",
-            style: GoogleFonts.modak(),
-          ),
-          // Campo usado para alterar o nome do mangá INPUT
-          content: TextField(
-            controller: tituloController,
-            decoration: const InputDecoration(
-              labelText: "Nome do mangá",
-              border: OutlineInputBorder(),
-            ),
-          ),
-          actions: [
-            // Botão para cancelar INPUT
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Fecha a janela NAVEGAÇÃO
-              },
-              child: const Text("Cancelar"),
-            ),
-            // Botão para salvar alteração INPUT
-            ElevatedButton(
-              onPressed: () async {
-                // Verifica se o campo não está vazio
-                if (tituloController.text.trim().isEmpty) {
-                  return;
-                }
-                // Cria o objeto atualizado
-                final mangaAtualizado = Manga(
-                  id: manga.id,
-                  titulo: tituloController.text.trim(),
-                  nota: manga.nota,
-                  progresso: manga.progresso,
-                );
-                // Atualiza o mangá no banco de dados
-                await _mangaController.atualizarManga(mangaAtualizado);
-                // Fecha a janela
-                if (context.mounted) {
-                  Navigator.pop(context);
-                }
-                // Atualiza a lista da tela
-                _carregarMangas();
-              },
-              child: const Text("Salvar"),
-            ),
-          ],
-        );
-      },
-    );
+    final tituloController = TextEditingController(text: manga.titulo);
+    showDialog(context: context, builder: (dialogContext) => AlertDialog(
+      title: Text('Editar Mangá', style: GoogleFonts.modak()),
+      content: TextField(controller: tituloController,
+        decoration: const InputDecoration(labelText: 'Nome do mangá', border: OutlineInputBorder())),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('Cancelar')),
+        ElevatedButton(onPressed: () async {
+          final titulo = tituloController.text.trim();
+          if (titulo.isEmpty) return;
+          await _mangaController.atualizarManga(Manga(
+            id: manga.id, titulo: titulo, nota: manga.nota,
+            progresso: manga.progresso, capa: manga.capa,
+          ));
+          if (!mounted) return;
+          if (dialogContext.mounted) Navigator.pop(dialogContext);
+          _carregarMangas();
+        }, child: const Text('Salvar')),
+      ],
+    ));
   }
+
+  // Exclui um mangá do SQLite
+  Future<void> _excluirManga(Manga manga) async {
+    if (manga.id == null) return;
+    await _mangaController.excluirManga(manga.id!);
+    if (!mounted) return;
+    _carregarMangas();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Mangá excluído com sucesso!')));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Estrutura principal da tela
       appBar: AppBar(
-        // Remove seta automática de voltar
         automaticallyImplyLeading: false,
-        title: Text(
-          "Meus Mangás",
-          style: GoogleFonts.modak(),
-        ),
-        // Widgets no canto direito da AppBar
-        actions: [ //Botão de pesquisa
-          IconButton(
-            icon: const Icon(
-              Icons.search,
-            ),
-            tooltip: "Buscar mangás",
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      const BuscaMangaPage(),
-                ),
-              );
-            },
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.logout,
-            ),
-          ),
+        title: Text('Meus Mangás', style: GoogleFonts.modak()),
+        actions: [
+          // Abre a pesquisa da API NAVEGAÇÃO
+          IconButton(icon: const Icon(Icons.search), tooltip: 'Buscar mangás', onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const MangaUI()))
+              .then((_) => _carregarMangas());
+          }),
+          IconButton(icon: const Icon(Icons.logout), onPressed: () => Navigator.pop(context)),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: mangas.isEmpty
-            ? Center( //Mensagem de quando não existe mangá
-                child: Column(
-                  mainAxisAlignment:
-                      MainAxisAlignment.center,
-                  children: [ 
-                    const Icon(
-                      Icons.menu_book,
-                      size: 80,
-                      color: Color.fromARGB(
-                        255,
-                        81,
-                        49,
-                        134,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      "Nenhum mangá adicionado",
-                      style: GoogleFonts.modak(
-                        fontSize: 24,
-                        color: const Color.fromARGB(
-                          255,
-                          81,
-                          49,
-                          134,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text(
-                      "Clique no botão + para adicionar um mangá.",
-                    ),
-                  ],
-                ),
-              )
-            : ListView.builder( //Lista dos mangás salvos no banco
-                itemCount: mangas.length,
-                itemBuilder: (context, index) {
-                  // Pega o mangá correspondente à posição da lista
-                  final manga = mangas[index];
-                  return Card(
-                    margin: const EdgeInsets.only(
-                      bottom: 15,
-                    ),
-                    child: ListTile(
-                      // Ícone do mangá
-                      leading: const Icon(
-                        Icons.menu_book,
-                        color: Color.fromARGB(
-                          255,
-                          81,
-                          49,
-                          134,
-                        ),
-                      ),
-                      // Mostra o nome vindo do banco
-                      title: Text(
-                        manga.titulo,
-                      ),
-                      subtitle: Text(
-                        "Nota: ${manga.nota} | Progresso: ${manga.progresso}%",
-                      ),
-                      // Coloca os botões de ação no lado direito
-                      trailing: Row(
-                        mainAxisSize:
-                            MainAxisSize.min,
-                        children: [
-                          IconButton( //Botão de avaliação
-                            onPressed: () {
-                              // Abre a tela de avaliação
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      ReviewPage(
-                                    mangaTitle:
-                                        manga.titulo,
-                                  ),
-                                ),
-                              ).then((_) {
-                                // Atualiza a lista ao voltar da avaliação
-                                _carregarMangas();
-                              });
-                            },
-                            icon: const Icon(
-                              Icons.star,
-                              color: Color.fromARGB(
-                                255,
-                                255,
-                                191,
-                                0,
-                              ),
-                            ),
-                          ),
-                          IconButton( //Botão de acompanhar leitura
-                            onPressed: () {
-                              // Abre a tela de leitura
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      ReadingProgressPage(
-                                    mangaTitle:
-                                        manga.titulo,
-                                  ),
-                                ),
-                              ).then((_) {
-                                // Atualiza a lista ao voltar
-                                // da leitura
-                                _carregarMangas();
-                              });
-                            },
-                            icon: const Icon(
-                              Icons.auto_stories,
-                              color: Color.fromARGB(
-                                255,
-                                31,
-                                92,
-                                33,
-                              ),
-                            ),
-                          ),
-                          IconButton( //Botão d eeditar
-                            onPressed: () {
-                              _editarManga(manga);
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.blue,
-                            ),
-                          ),
-                          IconButton( //Botão de excluir
-                            onPressed: () {
-                              _excluirManga(manga);
-                            },
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
+          ? Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              const Icon(Icons.menu_book, size: 80, color: Color.fromARGB(255, 81, 49, 134)),
+              const SizedBox(height: 20),
+              Text('Nenhum mangá adicionado', style: GoogleFonts.modak(
+                fontSize: 24, color: const Color.fromARGB(255, 81, 49, 134))),
+              const SizedBox(height: 10),
+              const Text('Clique no botão + para adicionar um mangá.'),
+            ]))
+          : ListView.builder(
+              itemCount: mangas.length,
+              itemBuilder: (context, index) {
+                final manga = mangas[index];
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 15),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Row(children: [
+                      // Capinha salva no SQLite LAYOUT
+                      Padding(padding: const EdgeInsets.only(left: 8), child: SizedBox(
+                        width: 55, height: 78,
+                        child: manga.capa == null || manga.capa!.isEmpty
+                          ? const Icon(Icons.menu_book, size: 35,
+                              color: Color.fromARGB(255, 81, 49, 134))
+                          : ClipRRect(borderRadius: BorderRadius.circular(5),
+                              child: Image.network(manga.capa!, fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => const Icon(Icons.menu_book))),
+                      )),
+                      Expanded(child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          Text(manga.titulo, style: const TextStyle(fontWeight: FontWeight.bold)),
+                          const SizedBox(height: 5),
+                          Text('Nota: ${manga.nota} | Progresso: ${manga.progresso}%'),
+                          // Wrap evita que os botões ultrapassem a tela do celular
+                          Wrap(spacing: 0, runSpacing: 0, children: [
+                            IconButton(tooltip: 'Avaliar', icon: const Icon(Icons.star, color: Color.fromARGB(255, 255, 191, 0)),
+                              onPressed: () => Navigator.push(context, MaterialPageRoute(
+                                builder: (_) => ReviewPage(mangaTitle: manga.titulo)))
+                                .then((_) => _carregarMangas())),
+                            IconButton(tooltip: 'Acompanhar leitura', icon: const Icon(Icons.auto_stories, color: Color.fromARGB(255, 31, 92, 33)),
+                              onPressed: () => Navigator.push(context, MaterialPageRoute(
+                                builder: (_) => ReadingProgressPage(mangaTitle: manga.titulo)))
+                                .then((_) => _carregarMangas())),
+                            IconButton(tooltip: 'Editar', icon: const Icon(Icons.edit, color: Colors.blue),
+                              onPressed: () => _editarManga(manga)),
+                            IconButton(tooltip: 'Excluir', icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () => _excluirManga(manga)),
+                          ]),
+                        ]),
+                      )),
+                    ]),
+                  ),
+                );
+              },
+            ),
       ),
-      floatingActionButton: FloatingActionButton( //Botão d eadicionar manualmente
-        backgroundColor: const Color.fromARGB(
-          255,
-          81,
-          49,
-          134,
-        ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromARGB(255, 81, 49, 134),
         onPressed: _adicionarManga,
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
